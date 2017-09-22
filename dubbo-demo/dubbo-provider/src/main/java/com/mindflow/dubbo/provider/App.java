@@ -22,7 +22,7 @@ public class App {
 			System.in.read();	// 按任意键退出
 		} catch (IOException e) {
 			e.printStackTrace();
-		} 
+		}
 
 	}
 }

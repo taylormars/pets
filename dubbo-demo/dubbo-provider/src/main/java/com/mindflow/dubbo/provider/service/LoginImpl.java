@@ -4,6 +4,7 @@ import com.mindflow.api.LoginService;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Service;
 
+import javax.annotation.Resource;
 import java.util.List;
 import java.util.Map;
 
@@ -12,12 +13,16 @@ import java.util.Map;
  */
 @Service("login")
 public class LoginImpl implements LoginService {
+    @Resource
     private JdbcTemplate jdbcTemplate;
 
     @Override
     public String login(int id) {
         String sql="select username,password from user_main where username = 'lyt'";
-      //  Object[] args = new Object[0];
+      //  String sql="select 1";
+
+        //  Object[] args = new Object[0];
+       // int list = jdbcTemplate.queryForInt(sql);
         List<Map<String, Object>> list = jdbcTemplate.queryForList(sql);
         if (list != null && list.size() > 0) {
             for (Map<String, Object> loan : list) {
@@ -29,7 +34,12 @@ public class LoginImpl implements LoginService {
                 }
 
             }
-        }
+       }
+//        if (list > 0) {
+//
+//                    return "登陆成功"+id;
+//
+//        }
         return "登陆失败"+id;
     }
 }
