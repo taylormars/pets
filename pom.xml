@@ -10,11 +10,10 @@
     <packaging>pom</packaging>
 
     <modules>
-        <module>demo-api</module>
-        <module>dubbo-demo</module>
-        <module>dubbox-demo</module>
-        <module>motan-demo</module>
-        <module>grpc-demo</module>
+        <module>dubbo-api</module>
+        <module>dubbo-provider</module>
+        <module>dubbo--consumer</module>
+
     </modules>
 
     <properties>
