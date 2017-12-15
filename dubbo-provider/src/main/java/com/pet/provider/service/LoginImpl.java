@@ -1,6 +1,7 @@
 package com.pet.provider.service;
 
 import com.pet.api.LoginService;
+import com.pet.api.model.UserAdmin;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Service;
 
@@ -41,5 +42,13 @@ public class LoginImpl implements LoginService {
 //
 //        }
         return "登陆失败"+id;
+    }
+
+    @Override
+    public UserAdmin loginAdmin(String userName , String password){
+//        String sql="SELECT * FROM admin_user_main WHERE userName = '"+userName+"' AND `password` = '"+password+"'";
+        String sql="SELECT * FROM admin_user_main WHERE userName = ? AND `password` = ?";
+        UserAdmin userAdmin=jdbcTemplate.queryForObject(sql,UserAdmin.class,new Object[]{userName,password});
+        return userAdmin;
     }
 }
