@@ -1,4 +1,4 @@
-package com.mindflow.dubbo.consumer;
+package com.pet.consumer;
 
 import com.mindflow.api.DemoService;
 import com.mindflow.api.LoginService;

@@ -1,4 +1,4 @@
-package com.mindflow.dubbo.consumer;
+package com.pet.consumer;
 
 import junit.framework.Test;
 import junit.framework.TestCase;
