@@ -8,7 +8,7 @@
        	http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util-4.3.xsd
        	http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.3.xsd">
 
-	<context:component-scan base-package="com.mindflow.dubbo.provider" />
+	<context:component-scan base-package="com.pet.provider" />
 	<context:annotation-config />
 
 	<!-- 引入配置文件 -->

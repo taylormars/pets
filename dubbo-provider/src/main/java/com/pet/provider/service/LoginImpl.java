@@ -1,6 +1,6 @@
-package com.mindflow.dubbo.provider.service;
+package com.pet.provider.service;
 
-import com.mindflow.api.LoginService;
+import com.pet.api.LoginService;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Service;
 

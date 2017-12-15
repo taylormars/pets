@@ -1,7 +1,7 @@
-package com.mindflow.dubbo.provider.service;
+package com.pet.provider.service;
 
-import com.mindflow.api.DemoService;
-import com.mindflow.api.model.User;
+import com.pet.api.DemoService;
+import com.pet.api.model.User;
 import org.springframework.stereotype.Service;
 
 @Service("demoService")

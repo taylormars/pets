@@ -1,4 +1,4 @@
-package com.mindflow.api;
+package com.pet.api;
 
 import junit.framework.Test;
 import junit.framework.TestCase;

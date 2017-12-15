@@ -1,8 +1,8 @@
 package com.pet.consumer;
 
-import com.mindflow.api.DemoService;
-import com.mindflow.api.LoginService;
-import com.mindflow.api.model.User;
+import com.pet.api.DemoService;
+import com.pet.api.LoginService;
+import com.pet.api.model.User;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;

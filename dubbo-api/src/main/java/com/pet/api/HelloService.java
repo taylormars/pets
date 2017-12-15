@@ -1,4 +1,4 @@
-package com.mindflow.api;
+package com.pet.api;
 
 public interface HelloService {
 

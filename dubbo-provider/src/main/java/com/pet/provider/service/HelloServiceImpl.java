@@ -1,6 +1,6 @@
-package com.mindflow.dubbo.provider.service;
+package com.pet.provider.service;
 
-import com.mindflow.api.HelloService;
+import com.pet.api.HelloService;
 import org.springframework.stereotype.Service;
 
 @Service("helloService")

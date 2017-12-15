@@ -20,12 +20,12 @@
     <dubbo:protocol name="rmi" port="20980" />
     
     <!-- 使用dubbo协议暴露服务 -->
-    <dubbo:service interface="com.mindflow.api.DemoService" ref="demoService" protocol="dubbo" />
-    <dubbo:service interface="com.mindflow.api.LoginService" ref="login" protocol="dubbo" />
+    <dubbo:service interface="com.pet.api.DemoService" ref="demoService" protocol="dubbo" />
+    <dubbo:service interface="com.pet.api.LoginService" ref="login" protocol="dubbo" />
 
     <!-- 使用rmi协议暴露服务 -->
- 	<dubbo:service interface="com.mindflow.api.HelloService" ref="helloService" protocol="rmi"  />
-    <dubbo:service interface="com.mindflow.api.LoginService" ref="login" protocol="rmi"  />
+ 	<dubbo:service interface="com.pet.api.HelloService" ref="helloService" protocol="rmi"  />
+    <dubbo:service interface="com.pet.api.LoginService" ref="login" protocol="rmi"  />
 
 
 </beans>

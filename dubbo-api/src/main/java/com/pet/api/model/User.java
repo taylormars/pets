@@ -1,4 +1,4 @@
-package com.mindflow.api.model;
+package com.pet.api.model;
 
 import java.io.Serializable;
 

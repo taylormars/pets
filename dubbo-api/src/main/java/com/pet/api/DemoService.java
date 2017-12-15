@@ -1,6 +1,6 @@
-package com.mindflow.api;
+package com.pet.api;
 
-import com.mindflow.api.model.User;
+import com.pet.api.model.User;
 
 public interface DemoService {
  

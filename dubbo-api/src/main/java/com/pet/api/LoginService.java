@@ -1,4 +1,4 @@
-package com.mindflow.api;
+package com.pet.api;
 
 /**
  * Created by liyut on 2017-09-14.

@@ -1,4 +1,4 @@
-package com.mindflow.dubbo.provider;
+package com.pet.provider;
 
 import junit.framework.Test;
 import junit.framework.TestCase;
