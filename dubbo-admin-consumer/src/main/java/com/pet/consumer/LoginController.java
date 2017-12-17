@@ -51,10 +51,10 @@ public class LoginController {
         String userName=request.getParameter("userName");
         String password=request.getParameter("password");
         String verifyCode=request.getParameter("verify");
-        HttpSession session = request.getSession();
+        HttpSession session = request.getSession(true);
         // 从请求中获得 URI ( 统一资源标识符 )
-        String uri = request.getRequestURI();
-       Object verfyCodeService= session.getAttribute(uri);
+        String uri = "/verify.do";
+       String verfyCodeService=session.getAttribute(uri).toString();
         System.out.println(session.getAttribute(uri));
 
 
