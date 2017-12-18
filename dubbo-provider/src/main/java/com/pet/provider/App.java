@@ -15,9 +15,9 @@ public class App {
 		ClassPathXmlApplicationContext context = new ClassPathXmlApplicationContext(
 				"classpath:applicationContext.xml");
 		context.start();
-		
+
 		System.out.println("Dubbo provider start...");
-		
+
 		try {
 			System.in.read();	// 按任意键退出
 		} catch (IOException e) {

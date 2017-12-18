@@ -9,6 +9,8 @@ import com.pet.consumer.utils.ResponseJsonUtils;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
@@ -32,6 +34,7 @@ public class LoginController {
     DemoService demoService;
     @Resource
     LoginService login;
+    private Logger logger = LoggerFactory.getLogger(LoginController.class);
 
     @RequestMapping("/test.do")
     @ResponseBody
@@ -45,47 +48,51 @@ public class LoginController {
         System.out.println(tis + "woshi"); // 显示调用结果
         return "1";
     }
+
     @RequestMapping("/login.do")
     @ResponseBody
     public String loginAdmin(HttpServletRequest request, HttpServletResponse response) {
-        String userName=request.getParameter("userName");
-        String password=request.getParameter("password");
-        String verifyCode=request.getParameter("verify");
+        logger.info("进入loginAdmin方法《》《《《《");
+        String userName = request.getParameter("userName");
+        String password = request.getParameter("password");
+        String verifyCode = request.getParameter("verify");
         HttpSession session = request.getSession(true);
         // 从请求中获得 URI ( 统一资源标识符 )
         String uri = "/verify.do";
-       String verfyCodeService=session.getAttribute(uri).toString();
-        System.out.println(session.getAttribute(uri));
-
-
-        try{
-       if (verifyCode.equals(verfyCodeService)){
-           UserAdmin userAdmin=login.loginAdmin(userName,password);
-           if (null!=userAdmin){
-               return "1";
-           }else {
-               return "2";
-           }
-       }}catch (Exception e) {
+        String verfyCodeService = session.getAttribute(uri).toString();
+        try {
+            if (verifyCode.equals(verfyCodeService)) {
+                UserAdmin userAdmin = login.loginAdmin(userName, password);
+                if (null != userAdmin) {
+                    logger.info("登录用户名" + userName + "登陆成功");
+                    return "1";
+                } else {
+                    logger.info("登录用户名" + userName + "密码用户名错误或不存在.");
+                    return "2";
+                }
+            }
+        } catch (Exception e) {
             e.printStackTrace();
         }
+        logger.info("登录用户名" + userName + "系统异常");
         return "3";
     }
+
     @RequestMapping("/json.do")
     @ResponseBody
     public void json(HttpServletRequest request, HttpServletResponse response) {
         Map<String, Object> data = new HashMap<String, Object>();
         Map<String, Object> data2 = new HashMap<String, Object>();
-        data2.put("hh","sd");
-        data2.put("hh2","sd3");
+        data2.put("hh", "sd");
+        data2.put("hh2", "sd3");
 
-        data2.put("hh3","sd2");
+        data2.put("hh3", "sd2");
 
         data.put("date", new Date());
         data.put("email", "accountwcx@qq.com");
         data.put("age", 30);
         data.put("name", "csdn");
-        data.put("array", new int[]{1,2,3,4});
+        data.put("array", new int[]{1, 2, 3, 4});
         data.put("data2", data2);
 
         ResponseJsonUtils.json(response, data);
@@ -96,7 +103,7 @@ public class LoginController {
     public void verify(HttpServletRequest request, HttpServletResponse response) {
         // 获得 当前请求 对应的 会话对象
         HttpSession session = request.getSession();
-
+        logger.info("进入verify方法《》《《《《");
         // 从请求中获得 URI ( 统一资源标识符 )
         String uri = request.getRequestURI();
         System.out.println("hello : " + uri);
@@ -109,7 +116,7 @@ public class LoginController {
             output = response.getOutputStream();
             String code = GraphicUtils.create(width, height, imgType, output);
             // 创建验证码图片并返回图片上的字符串
-            System.out.println("验证码内容: " + code);
+            logger.info("验证码内容: " + code);
 
             // 建立 uri 和 相应的 验证码 的关联 ( 存储到当前会话对象的属性中 )
             session.setAttribute(uri, code);
@@ -118,8 +125,6 @@ public class LoginController {
         }
         // (字节流)
 
-        System.out.println(session.getAttribute(uri));
-
-}
+    }
 
 }

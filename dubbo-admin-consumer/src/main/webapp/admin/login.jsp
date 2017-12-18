@@ -7,15 +7,15 @@
 <meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no" />
 <meta http-equiv="Cache-Control" content="no-siteapp" />
 <!--[if lt IE 9]>
-<script type="text/javascript" src="lib/html5shiv.js"></script>
-<script type="text/javascript" src="lib/respond.min.js"></script>
+<script type="text/javascript" src="admin/lib/html5shiv.js"></script>
+<script type="text/javascript" src="admin/lib/respond.min.js"></script>
 <![endif]-->
-<link href="static/h-ui/css/H-ui.min.css" rel="stylesheet" type="text/css" />
-<link href="static/h-ui.admin/css/H-ui.login.css" rel="stylesheet" type="text/css" />
-<link href="static/h-ui.admin/css/style.css" rel="stylesheet" type="text/css" />
-<link href="lib/Hui-iconfont/1.0.8/iconfont.css" rel="stylesheet" type="text/css" />
+<link href="admin/static/h-ui/css/H-ui.min.css" rel="stylesheet" type="text/css" />
+<link href="admin/static/h-ui.admin/css/H-ui.login.css" rel="stylesheet" type="text/css" />
+<link href="admin/static/h-ui.admin/css/style.css" rel="stylesheet" type="text/css" />
+<link href="admin/lib/Hui-iconfont/1.0.8/iconfont.css" rel="stylesheet" type="text/css" />
 <!--[if IE 6]>
-<script type="text/javascript" src="lib/DD_belatedPNG_0.0.8a-min.js" ></script>
+<script type="text/javascript" src="admin/lib/DD_belatedPNG_0.0.8a-min.js" ></script>
 <script>DD_belatedPNG.fix('*');</script>
 <![endif]-->
 <title>NeverGoPet后台登录</title>
@@ -60,8 +60,8 @@
   </div>
 </div>
 <div class="footer">Copyright NevergoPet by H-ui.admin v3.1</div>
-<script type="text/javascript" src="lib/jquery/1.9.1/jquery.min.js"></script> 
-<script type="text/javascript" src="static/h-ui/js/H-ui.min.js"></script>
+<script type="text/javascript" src="admin/lib/jquery/1.9.1/jquery.min.js"></script>
+<script type="text/javascript" src="admin/static/h-ui/js/H-ui.min.js"></script>
 <!--此乃百度统计代码，请自行删除-->
 <script>
 function myRefersh( e ) {
@@ -108,6 +108,17 @@ function login() {
             },
             success : function(data) {
                 alert(data)
+
+                if(data==2){
+                alert("用户名密码错误")
+            }
+            else if(data==3){
+                alert("系统错误")
+            }
+            else if (data==1){
+                window.open("admin/index.html");
+
+            }
             }
         })
     }
