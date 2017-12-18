@@ -3,9 +3,12 @@ package com.pet.provider.service;
 import com.pet.api.LoginService;
 import com.pet.api.model.UserAdmin;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.List;
 import java.util.Map;
 
@@ -48,7 +51,21 @@ public class LoginImpl implements LoginService {
     public UserAdmin loginAdmin(String userName , String password){
 //        String sql="SELECT * FROM admin_user_main WHERE userName = '"+userName+"' AND `password` = '"+password+"'";
         String sql="SELECT * FROM admin_user_main WHERE userName = ? AND `password` = ?";
-        UserAdmin userAdmin=jdbcTemplate.queryForObject(sql,UserAdmin.class,new Object[]{userName,password});
-        return userAdmin;
+        try{
+        UserAdmin userAdmin=jdbcTemplate.queryForObject(sql, new RowMapper<UserAdmin>(){
+            @Override
+            public UserAdmin mapRow(ResultSet arg0, int arg1) throws SQLException {
+                UserAdmin user=new UserAdmin();
+                user.setId(arg0.getInt("id"));
+                user.setUserName(arg0.getString("userName"));
+                user.setPassword(arg0.getString("password"));
+                user.setLevel(arg0.getInt("level"));
+                return user;
+            }
+        },new Object[]{userName,password});
+        return userAdmin;}
+        catch (Exception es){
+            return null;
+        }
     }
 }

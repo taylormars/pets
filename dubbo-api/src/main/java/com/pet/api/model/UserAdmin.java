@@ -10,7 +10,7 @@ public class UserAdmin implements Serializable {
 
         private long id;
         private String userName;
-        private String passwoord;
+        private String password;
         private Integer level;
         public long getId() {
             return id;
@@ -24,11 +24,11 @@ public class UserAdmin implements Serializable {
         public void setUserName(String userName) {
             this.userName = userName;
         }
-        public String getPasswoord() {
-            return passwoord;
+        public String getPassword() {
+            return password;
         }
-        public void setPasswoord(String passwoord) {
-            this.passwoord = passwoord;
+        public void setPassword(String password) {
+            this.password = password;
         }
         public Integer getLevel() {
         return level;
@@ -38,7 +38,7 @@ public class UserAdmin implements Serializable {
     }
         @Override
         public String toString() {
-            return "User [id=" + id + ", userName=" + userName + ", passwoord=" + passwoord + ", level="+level+"]";
+            return "User {id=" + id + ", userName=" + userName + ", password=" + password + ", level="+level+"]";
         }
 
 }

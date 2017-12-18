@@ -3,6 +3,7 @@ package com.pet.consumer;
 import com.pet.api.DemoService;
 import com.pet.api.LoginService;
 import com.pet.api.model.User;
+import com.pet.api.model.UserAdmin;
 import com.pet.consumer.utils.GraphicUtils;
 import com.pet.consumer.utils.ResponseJsonUtils;
 import org.springframework.stereotype.Controller;
@@ -95,5 +96,30 @@ public class LoginController {
         System.out.println(session.getAttribute(uri));
 
 }
+@RequestMapping("/login.do")
+    @ResponseBody
+    public String loginAdmin(HttpServletRequest request, HttpServletResponse response) {
+        String userName=request.getParameter("userName");
+        String password=request.getParameter("password");
+//        String verifyCode=request.getParameter("verify");
+//        HttpSession session = request.getSession(true);
+//        // 从请求中获得 URI ( 统一资源标识符 )
+//        String uri = "/verify.do";
+//        String verfyCodeService=session.getAttribute(uri).toString();
+//        System.out.println(session.getAttribute(uri));
+        try{
+//            if (verifyCode.equals(verfyCodeService)){
+                UserAdmin userAdmin=login.loginAdmin(userName,password);
+                if (null!=userAdmin){
+                    return "1";
+                }else {
+                    return "2";
+                }
+//            }
+    }catch (Exception e) {
+            e.printStackTrace();
+        }
+        return "0";
+    }
 
 }
