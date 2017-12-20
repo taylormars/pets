@@ -12,6 +12,11 @@ public interface LoginService {
 
     public UserAdmin loginAdmin(String userName,String password);
 
+    public UserMain loginUserMain(String userName,String password);
+
+
     public UserMain exsitUserName(String userName);
+
+    public Integer register(UserMain userMain);
 
 }

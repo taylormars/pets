@@ -4,6 +4,8 @@ import com.pet.api.LoginService;
 import com.pet.api.model.User;
 import com.pet.api.model.UserAdmin;
 import com.pet.api.model.UserMain;
+import com.pet.provider.utils.SqlUtils;
+import org.apache.commons.codec.digest.DigestUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -23,6 +25,9 @@ import java.util.Map;
 public class LoginImpl implements LoginService {
     @Resource
     private JdbcTemplate jdbcTemplate;
+    @Resource
+    private SqlUtils sqlUtils;
+
     private Logger logger = LoggerFactory.getLogger(LoginImpl.class);
 
     @Override
@@ -78,6 +83,32 @@ public class LoginImpl implements LoginService {
     }
 
     @Override
+    public UserMain loginUserMain(String userName, String password) {
+        logger.info("进入loginAdmin方法》》》》》");
+        String sql="SELECT * FROM user_main WHERE userName = ? AND `password` = ?";
+        String passwordmd5=DigestUtils.md5Hex(password);
+        try{
+            UserMain userMain=jdbcTemplate.queryForObject(sql, new RowMapper<UserMain>(){
+                @Override
+                public UserMain mapRow(ResultSet arg0, int arg1) throws SQLException {
+                    UserMain user=new UserMain();
+                    user.setUserId(arg0.getInt("userId"));
+                    user.setUserName(arg0.getString("userName"));
+                    user.setPassword(arg0.getString("password"));
+                    user.setUserPicId(arg0.getInt("userPicId"));
+                    user.setRegisterTime(arg0.getDate("registerTime"));
+                    return user;
+                }
+            },new Object[]{userName,passwordmd5});
+            logger.info("获取用户成功"+userMain.getUserName());
+            return userMain;}
+        catch (Exception es){
+            logger.info("获取用户失败");
+            return null;
+        }
+    }
+
+    @Override
     public UserMain exsitUserName(String userName) {
         logger.info("进入exsitUserName方法》》》》》");
         String sql ="SELECT * FROM user_main WHERE username = ?";
@@ -100,5 +131,23 @@ public class LoginImpl implements LoginService {
             logger.info("获取用户失败");
             return null;
         }
+    }
+
+    @Override
+    public Integer register(UserMain userMain) {
+        logger.info("进入register方法》》》》》");
+        String sql ="INSERT INTO user_main ( userName, password, userPicId, registerTime ) VALUES (?,?,?, NOW())";
+       String userpassword= DigestUtils.md5Hex( userMain.getPassword());
+        int userId=0;
+        try{
+            userId=sqlUtils.insertSqlAndReturnKeyId(sql,new Object[]{userMain.getUserName(),userpassword,userMain.getUserPicId()});
+            return userId;
+        }catch (Exception e)
+        {
+            logger.info("注册失败");
+            return userId;
+        }
+
+
     }
 }

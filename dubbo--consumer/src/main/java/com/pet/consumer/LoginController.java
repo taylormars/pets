@@ -76,10 +76,16 @@ public class LoginController {
     public void verify(HttpServletRequest request, HttpServletResponse response) {
         logger.info("进入verify方法》《《《");
         // 获得 当前请求 对应的 会话对象
+//        try {
+//            request.setCharacterEncoding("utf-8");
+//        } catch (UnsupportedEncodingException e) {
+//            e.printStackTrace();
+//        }
+//        response.setContentType("text/html;charset=utf-8");
         HttpSession session = request.getSession();
         // 从请求中获得 URI ( 统一资源标识符 )
-        String uri = request.getRequestURI();
-        System.out.println("hello : " + uri);
+        String userVerifyCode = request.getParameter("userVerifyCode");
+        System.out.println("hello : " + userVerifyCode);
         final int width = 180; // 图片宽度
         final int height = 40; // 图片高度
         final String imgType = "jpeg"; // 指定图片格式 (不是指MIME类型)
@@ -90,7 +96,9 @@ public class LoginController {
             // 创建验证码图片并返回图片上的字符串
             logger.info("验证码内容: " + code);
             // 建立 uri 和 相应的 验证码 的关联 ( 存储到当前会话对象的属性中 )
-            session.setAttribute(uri, code);
+            session.setAttribute(userVerifyCode, code);
+//            logger.info(String.valueOf(session.getAttribute(userVerifyCode)));
+
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -112,13 +120,20 @@ public class LoginController {
         String userName = request.getParameter("userName");
         String password = request.getParameter("password");
         logger.info("登录用户名" + userName + "登录密码" + password);
+
+        UserMain userMainExsitName = login.exsitUserName(userName);
+        if (null == userMainExsitName) {
+            logger.info("用户名不存在存在");
+            data.put("code", "4");
+        } else {
         try {
-            UserAdmin userAdmin = login.loginAdmin(userName, password);
-            if (null != userAdmin) {
+            UserMain userMain = login.loginUserMain(userName, password);
+            if (null != userMain) {
                 logger.info("登录用户名" + userName + "登陆成功");
                 data.put("code", "1");
+                data.put("userId",userMain.getUserId());
             } else {
-                logger.info("登录用户名" + userName + "密码用户名错误或不存在");
+                logger.info("登录用户名" + userName + "密码错误");
                 data.put("code", "2");
             }
         } catch (Exception e) {
@@ -126,30 +141,89 @@ public class LoginController {
             logger.info("登录用户名" + userName + "系统异常");
             data.put("code", "3");
         }
+        }
         ResponseJsonUtils.json(response, data);
     }
 
+//
+//    @RequestMapping("/exsitUserName")
+//    @ResponseBody
+//    public void exsitUserName(HttpServletRequest request, HttpServletResponse response) {
+//        logger.info("进入exsitUserName方法》《《《");
+//        Map<String, Object> data = new HashMap<String, Object>();
+//        try {
+//            request.setCharacterEncoding("utf-8");
+//        } catch (UnsupportedEncodingException e) {
+//            e.printStackTrace();
+//        }
+//        response.setContentType("text/html;charset=utf-8");
+//        String userName = request.getParameter("userName");
+//        UserMain userMain = login.exsitUserName(userName);
+//        if (null != userMain) {
+//            logger.info("用户名存在");
+//            data.put("code", "1");
+//        } else {
+//            logger.info("用户名不存在");
+//            data.put("code", "0");
+//        }
+//        ResponseJsonUtils.json(response, data);
+//    }
 
-    @RequestMapping("/exsitUserName")
+    @RequestMapping("/register")
     @ResponseBody
-    public void exsitUserName(HttpServletRequest request, HttpServletResponse response) {
-        logger.info("进入exsitUserName方法》《《《");
+    public void register(HttpServletRequest request,HttpServletResponse response){
+        logger.info("进入register方法》《《《");
         Map<String, Object> data = new HashMap<String, Object>();
-        try {
-            request.setCharacterEncoding("utf-8");
-        } catch (UnsupportedEncodingException e) {
-            e.printStackTrace();
-        }
-        response.setContentType("text/html;charset=utf-8");
+        HttpSession session = request.getSession(true);
+//        try {
+//            request.setCharacterEncoding("utf-8");
+//        } catch (UnsupportedEncodingException e) {
+//            e.printStackTrace();
+//        }
+//        response.setContentType("text/html;charset=utf-8");
         String userName = request.getParameter("userName");
-        UserMain userMain = login.exsitUserName(userName);
-        if (null != userMain) {
+        String password = request.getParameter("password");
+        String verify = request.getParameter("verify");
+        String userVerifyCode = request.getParameter("userVerifyCode");
+        logger.info(userVerifyCode);
+        logger.info(String.valueOf(session.getAttribute(userVerifyCode)));
+        logger.info(String.valueOf(session.getAttribute("86483")));
+
+        String verfyCodeService = session.getAttribute(userVerifyCode).toString();
+        UserMain userMainExsitName = login.exsitUserName(userName);
+        if (null != userMainExsitName) {
             logger.info("用户名存在");
-            data.put("code", "1");
+            data.put("code", "3");
         } else {
             logger.info("用户名不存在");
-            data.put("code", "0");
+        try {
+            if (verify.equals(verfyCodeService)) {
+                UserMain userMain= new UserMain();
+                userMain.setUserName(userName);
+                userMain.setPassword(password);
+                userMain.setUserPicId(1);
+                Integer userID = login.register(userMain);
+                if (0!= userID) {
+                    logger.info("注册用户名" + userName + "注册成功");
+                    data.put("code",1);
+                    data.put("userId",userID);
+                } else {
+                    logger.info("注册用户名" + userName + "注册失败.");
+                    data.put("code",2);
+                    data.put("userId",userID);
+                }
+            }else {
+                logger.info("注册用户名" + userName + "验证码错误.");
+                data.put("code",4);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            logger.info("注册用户名" + userName + "注册失败.");
+            data.put("code",2);
+        }
         }
         ResponseJsonUtils.json(response, data);
     }
+
+
 }

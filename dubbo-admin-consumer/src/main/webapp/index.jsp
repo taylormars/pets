@@ -34,7 +34,7 @@
 </head>
 <body>
 <div class="container form-container">
-    <form action="/wendao/regist.do" method="post">
+    <form action="/wendao/regist.do?userVerifyCode=100" method="post">
         <div class="form"> <!-- 注册表单开始 -->
 
             <div class="form-row">
@@ -69,7 +69,7 @@
                             <input type="text" name="verifyCode" placeholder="请输入验证码">
                         </span>
                         <span class="cell-5" style="text-align: center;">
-                            <img src="/verify.do" onclick="myRefersh(this)">
+                            <img src="/verify.do?userVerifyCode=100" onclick="myRefersh(this)">
                         </span>
             </div>
 
