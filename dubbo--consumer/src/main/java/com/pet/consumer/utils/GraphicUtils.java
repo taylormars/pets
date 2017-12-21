@@ -50,12 +50,12 @@ public class GraphicUtils {
 
         // 在 "画板"上绘制字母
         graphic.setFont(new Font("Comic Sans MS", Font.BOLD, 30));
-        for (int i = 0; i < 6; i++) {
+        for (int i = 0; i < 4; i++) {
             final int temp = random.nextInt(26) + 97;
             String s = String.valueOf((char) temp);
             sb.append(s);
             graphic.setColor(colors[random.nextInt(colors.length)]);
-            graphic.drawString(s, i * (width / 6), height - (height / 3));
+            graphic.drawString(s, i * (width / 4), height - (height / 3));
         }
         graphic.dispose();
         try {

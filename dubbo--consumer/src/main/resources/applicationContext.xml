@@ -15,5 +15,5 @@
 	<util:properties id="dubbo" location="classpath:dubbo.properties"/>
 
 	<import resource="spring-dubbo.xml"/>
-	
+
 </beans>

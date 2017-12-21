@@ -69,7 +69,7 @@
                             <input type="text" name="verifyCode" placeholder="请输入验证码">
                         </span>
                         <span class="cell-5" style="text-align: center;">
-                            <img src="/verify.do" onclick="myRefersh(this)">
+                            <img src="" onclick="myRefersh(this)">
                         </span>
             </div>
 

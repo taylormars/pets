@@ -6,6 +6,7 @@ import com.pet.api.model.User;
 import com.pet.api.model.UserAdmin;
 import com.pet.api.model.UserMain;
 import com.pet.consumer.utils.GraphicUtils;
+import com.pet.consumer.utils.RedisUtils;
 import com.pet.consumer.utils.ResponseJsonUtils;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -36,18 +37,20 @@ public class LoginController {
     DemoService demoService;
     @Resource
     LoginService login;
+    @Resource
+    RedisUtils redisUtils;
     private Logger logger = LoggerFactory.getLogger(LoginController.class);
 
     @RequestMapping("/test.do")
     @ResponseBody
-    public String login() {
-        String hello = demoService.sayHello("ricky"); // 执行远程方法
-        System.out.println(hello); // 显示调用结果
+    public String login(HttpServletRequest request, HttpServletResponse response) {
+       String test=request.getParameter("test");
 
-        User user = demoService.findUserById(15);
-        System.out.println(user); // 显示调用结果
-        String tis = login.login(8);
-        System.out.println(tis + "woshi"); // 显示调用结果
+//       logger.info(redissUtils.ping());
+//       redissUtils.set("test1","text");
+////        RedissUtils redissUtils =(RedissUtils)factory.getBean("");
+////       redisUtils.set("test",test);
+//       logger.info(redissUtils.get("test").toString());
         return "1";
     }
 
@@ -76,13 +79,7 @@ public class LoginController {
     public void verify(HttpServletRequest request, HttpServletResponse response) {
         logger.info("进入verify方法》《《《");
         // 获得 当前请求 对应的 会话对象
-//        try {
-//            request.setCharacterEncoding("utf-8");
-//        } catch (UnsupportedEncodingException e) {
-//            e.printStackTrace();
-//        }
-//        response.setContentType("text/html;charset=utf-8");
-//        HttpSession session = request.getSession();
+
         // 从请求中获得 URI ( 统一资源标识符 )
         String userVerifyCode = request.getParameter("userVerifyCode");
         System.out.println("hello : " + userVerifyCode);
@@ -97,25 +94,16 @@ public class LoginController {
             // 创建验证码图片并返回图片上的字符串
             logger.info("验证码内容: " + code);
             // 建立 uri 和 相应的 验证码 的关联 ( 存储到当前会话对象的属性中 )
-            login.insertVerifyCode(userVerifyCode,code);
-//            session.setAttribute(userVerifyCode, code);
+//            redissUtils.set(userVerifyCode,code,60*3);
+
+            redisUtils.set("verify"+userVerifyCode,code,60*3);
+            logger.info("生成redis缓存"+"verify"+userVerifyCode);
+//            login.insertVerifyCode(userVerifyCode,code);
 //            logger.info(String.valueOf(session.getAttribute(userVerifyCode)));
         } catch (IOException e) {
             e.printStackTrace();
         }
 
-    }
-
-    @RequestMapping("/testverify.do")
-    @ResponseBody
-    public String testverify(HttpServletRequest request,HttpServletResponse response){
-        logger.info("进入testverify方法》《《《");
-
-        HttpSession session = request.getSession();
-        String userVerifyCode = request.getParameter("userVerifyCode");
-        String code=session.getAttribute(userVerifyCode).toString();
-        logger.info(code);
-        return code;
     }
 
     @RequestMapping("/login.do")
@@ -158,29 +146,6 @@ public class LoginController {
         ResponseJsonUtils.json(response, data);
     }
 
-//
-//    @RequestMapping("/exsitUserName")
-//    @ResponseBody
-//    public void exsitUserName(HttpServletRequest request, HttpServletResponse response) {
-//        logger.info("进入exsitUserName方法》《《《");
-//        Map<String, Object> data = new HashMap<String, Object>();
-//        try {
-//            request.setCharacterEncoding("utf-8");
-//        } catch (UnsupportedEncodingException e) {
-//            e.printStackTrace();
-//        }
-//        response.setContentType("text/html;charset=utf-8");
-//        String userName = request.getParameter("userName");
-//        UserMain userMain = login.exsitUserName(userName);
-//        if (null != userMain) {
-//            logger.info("用户名存在");
-//            data.put("code", "1");
-//        } else {
-//            logger.info("用户名不存在");
-//            data.put("code", "0");
-//        }
-//        ResponseJsonUtils.json(response, data);
-//    }
 
     @RequestMapping("/register")
     @ResponseBody
@@ -199,45 +164,49 @@ public class LoginController {
         String verify = request.getParameter("verify");
         String userVerifyCode = request.getParameter("userVerifyCode");
         logger.info(userVerifyCode);
-//        logger.info(String.valueOf(session.getAttribute(userVerifyCode)));
-//        logger.info(String.valueOf(session.getAttribute(userVerifyCode)));
-//
-//        String verfyCodeService = session.getAttribute(userVerifyCode).toString();
-        String verfyCodeService =login.queryVerifyCode(userVerifyCode);
-        UserMain userMainExsitName = login.exsitUserName(userName);
-        if (null != userMainExsitName) {
-            logger.info("用户名存在");
-            data.put("code", "3");
-        } else {
-            logger.info("用户名不存在");
-        try {
-            if (verify.equals(verfyCodeService)) {
-                UserMain userMain= new UserMain();
-                userMain.setUserName(userName);
-                userMain.setPassword(password);
-                userMain.setUserPicId(1);
-                Integer userID = login.register(userMain);
-                if (0!= userID) {
-                    logger.info("注册用户名" + userName + "注册成功");
-                    data.put("code",1);
-                    data.put("userId",userID);
-                } else {
+
+        String verfyCodeService =redisUtils.get("verify"+userVerifyCode);
+        if (verfyCodeService!=null) {
+            UserMain userMainExsitName = login.exsitUserName(userName);
+            if (null != userMainExsitName) {
+                logger.info("用户名存在");
+                data.put("code", "3");
+            } else {
+                logger.info(userName+"用户名不存在");
+                try {
+                    if (verify.equals(verfyCodeService)) {
+                        UserMain userMain = new UserMain();
+                        userMain.setUserName(userName);
+                        userMain.setPassword(password);
+                        userMain.setUserPicId(1);
+                        Integer userID = login.register(userMain);
+                        if (0 != userID) {
+                            logger.info("注册用户名" + userName + "注册成功");
+                            data.put("code", 1);
+                            data.put("userId", userID);
+                        } else {
+                            logger.info("注册用户名" + userName + "注册失败.");
+                            data.put("code", 2);
+                            data.put("userId", userID);
+                        }
+                    } else {
+                        logger.info("注册用户名" + userName + "验证码错误.");
+                        data.put("code", 4);
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
                     logger.info("注册用户名" + userName + "注册失败.");
-                    data.put("code",2);
-                    data.put("userId",userID);
+                    data.put("code", 2);
                 }
-            }else {
-                logger.info("注册用户名" + userName + "验证码错误.");
-                data.put("code",4);
             }
-        } catch (Exception e) {
-            e.printStackTrace();
-            logger.info("注册用户名" + userName + "注册失败.");
-            data.put("code",2);
-        }
+        }else {
+            logger.info("注册用户名" + userName + "注册失败.验证码过期");
+            data.put("code", 5);
         }
         ResponseJsonUtils.json(response, data);
     }
+
+
 
 
 }
