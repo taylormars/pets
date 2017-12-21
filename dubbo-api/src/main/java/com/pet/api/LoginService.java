@@ -19,4 +19,7 @@ public interface LoginService {
 
     public Integer register(UserMain userMain);
 
+    public void insertVerifyCode(String userVerifyCode,String code);
+
+    public String queryVerifyCode(String userVerifyCode);
 }

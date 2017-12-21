@@ -15,6 +15,7 @@ import org.springframework.stereotype.Service;
 import javax.annotation.Resource;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -149,5 +150,21 @@ public class LoginImpl implements LoginService {
         }
 
 
+    }
+
+    @Override
+    public void insertVerifyCode(String userVerifyCode, String code) {
+        String sql="INSERT INTO verify_code ( userVerifyCode,code) VALUES (?,?) ON DUPLICATE KEY UPDATE code=VALUES(code)";
+        jdbcTemplate.update(sql,new Object[]{userVerifyCode,code});
+    }
+
+    @Override
+    public String queryVerifyCode(String userVerifyCode) {
+        String sql="SELECT code FROM verify_code WHERE userVerifyCode="+userVerifyCode;
+        String code=null;
+        Map map=new HashMap();
+        map=jdbcTemplate.queryForMap(sql);
+        code=map.get("code").toString();
+        return code;
     }
 }

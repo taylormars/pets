@@ -82,7 +82,7 @@ public class LoginController {
 //            e.printStackTrace();
 //        }
 //        response.setContentType("text/html;charset=utf-8");
-        HttpSession session = request.getSession();
+//        HttpSession session = request.getSession();
         // 从请求中获得 URI ( 统一资源标识符 )
         String userVerifyCode = request.getParameter("userVerifyCode");
         System.out.println("hello : " + userVerifyCode);
@@ -90,19 +90,32 @@ public class LoginController {
         final int height = 40; // 图片高度
         final String imgType = "jpeg"; // 指定图片格式 (不是指MIME类型)
         final OutputStream output; // 获得可以向客户端返回图片的输出流
+        ;
         try {
             output = response.getOutputStream();
             String code = GraphicUtils.create(width, height, imgType, output);
             // 创建验证码图片并返回图片上的字符串
             logger.info("验证码内容: " + code);
             // 建立 uri 和 相应的 验证码 的关联 ( 存储到当前会话对象的属性中 )
-            session.setAttribute(userVerifyCode, code);
+            login.insertVerifyCode(userVerifyCode,code);
+//            session.setAttribute(userVerifyCode, code);
 //            logger.info(String.valueOf(session.getAttribute(userVerifyCode)));
-
         } catch (IOException e) {
             e.printStackTrace();
         }
 
+    }
+
+    @RequestMapping("/testverify.do")
+    @ResponseBody
+    public String testverify(HttpServletRequest request,HttpServletResponse response){
+        logger.info("进入testverify方法》《《《");
+
+        HttpSession session = request.getSession();
+        String userVerifyCode = request.getParameter("userVerifyCode");
+        String code=session.getAttribute(userVerifyCode).toString();
+        logger.info(code);
+        return code;
     }
 
     @RequestMapping("/login.do")
@@ -174,22 +187,23 @@ public class LoginController {
     public void register(HttpServletRequest request,HttpServletResponse response){
         logger.info("进入register方法》《《《");
         Map<String, Object> data = new HashMap<String, Object>();
-        HttpSession session = request.getSession(true);
-//        try {
-//            request.setCharacterEncoding("utf-8");
-//        } catch (UnsupportedEncodingException e) {
-//            e.printStackTrace();
-//        }
-//        response.setContentType("text/html;charset=utf-8");
+//        HttpSession session = request.getSession(true);
+        try {
+            request.setCharacterEncoding("utf-8");
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        }
+        response.setContentType("text/html;charset=utf-8");
         String userName = request.getParameter("userName");
         String password = request.getParameter("password");
         String verify = request.getParameter("verify");
         String userVerifyCode = request.getParameter("userVerifyCode");
         logger.info(userVerifyCode);
-        logger.info(String.valueOf(session.getAttribute(userVerifyCode)));
-        logger.info(String.valueOf(session.getAttribute("86483")));
-
-        String verfyCodeService = session.getAttribute(userVerifyCode).toString();
+//        logger.info(String.valueOf(session.getAttribute(userVerifyCode)));
+//        logger.info(String.valueOf(session.getAttribute(userVerifyCode)));
+//
+//        String verfyCodeService = session.getAttribute(userVerifyCode).toString();
+        String verfyCodeService =login.queryVerifyCode(userVerifyCode);
         UserMain userMainExsitName = login.exsitUserName(userName);
         if (null != userMainExsitName) {
             logger.info("用户名存在");
