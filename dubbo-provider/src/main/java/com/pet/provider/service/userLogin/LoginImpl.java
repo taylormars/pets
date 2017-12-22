@@ -1,7 +1,6 @@
-package com.pet.provider.service;
+package com.pet.provider.service.userLogin;
 
-import com.pet.api.LoginService;
-import com.pet.api.model.User;
+import com.pet.api.userLogin.LoginService;
 import com.pet.api.model.UserAdmin;
 import com.pet.api.model.UserMain;
 import com.pet.provider.utils.SqlUtils;
@@ -137,11 +136,11 @@ public class LoginImpl implements LoginService {
     @Override
     public Integer register(UserMain userMain) {
         logger.info("进入register方法》》》》》");
-        String sql ="INSERT INTO user_main ( userName, password, userPicId, registerTime ) VALUES (?,?,?, NOW())";
+        String sql ="INSERT INTO user_main ( userName, password, userPicId, registerTime ,coin , diamond) VALUES (?,?,?, NOW(),?,?)";
        String userpassword= DigestUtils.md5Hex( userMain.getPassword());
         int userId=0;
         try{
-            userId=sqlUtils.insertSqlAndReturnKeyId(sql,new Object[]{userMain.getUserName(),userpassword,userMain.getUserPicId()});
+            userId=sqlUtils.insertSqlAndReturnKeyId(sql,new Object[]{userMain.getUserName(),userpassword,userMain.getUserPicId(),userMain.getCoin(),userMain.getDiamond()});
             return userId;
         }catch (Exception e)
         {
@@ -166,5 +165,19 @@ public class LoginImpl implements LoginService {
         map=jdbcTemplate.queryForMap(sql);
         code=map.get("code").toString();
         return code;
+    }
+
+
+    @Override
+    public Map<String, Object>queryLoadingInfo(String userId)
+    {
+        String sql="SELECT IFNULL(ap.petkindid, 0) AS petkindid, um.userName, um.coin, um.diamond, um.userPicId, COUNT(ap.petid) AS isNew ,ap.petStatus ,ap.petnickname FROM adopt ap, user_main um WHERE ap.userId = um.userId AND um.userid = ?";
+        Map map=new HashMap();
+        try {
+            map = jdbcTemplate.queryForMap(sql, new Object[]{userId});
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+        return map;
     }
 }

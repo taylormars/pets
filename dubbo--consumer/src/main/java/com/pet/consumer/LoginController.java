@@ -1,9 +1,7 @@
 package com.pet.consumer;
 
 import com.pet.api.DemoService;
-import com.pet.api.LoginService;
-import com.pet.api.model.User;
-import com.pet.api.model.UserAdmin;
+import com.pet.api.userLogin.LoginService;
 import com.pet.api.model.UserMain;
 import com.pet.consumer.utils.GraphicUtils;
 import com.pet.consumer.utils.RedisUtils;
@@ -17,13 +15,11 @@ import org.slf4j.LoggerFactory;
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.io.UnsupportedEncodingException;
 import java.util.Date;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 
@@ -109,7 +105,7 @@ public class LoginController {
     @RequestMapping("/login.do")
     @ResponseBody
     public void loginAdmin(HttpServletRequest request, HttpServletResponse response) {
-        logger.info("进入loginAdmin方法》《《《");
+        logger.info("进入loginUserMain方法》《《《");
         Map<String, Object> data = new HashMap<String, Object>();
 
         try {
@@ -179,6 +175,8 @@ public class LoginController {
                         userMain.setUserName(userName);
                         userMain.setPassword(password);
                         userMain.setUserPicId(1);
+                        userMain.setCoin(0);
+                        userMain.setDiamond(0);
                         Integer userID = login.register(userMain);
                         if (0 != userID) {
                             logger.info("注册用户名" + userName + "注册成功");
@@ -206,7 +204,30 @@ public class LoginController {
         ResponseJsonUtils.json(response, data);
     }
 
-
+    @RequestMapping("/loading")
+    @ResponseBody
+    public void loading(HttpServletRequest request,HttpServletResponse response){
+        logger.info("进入loading方法》《《《");
+        Map<String, Object> data = new HashMap<String, Object>();
+        try {
+            request.setCharacterEncoding("utf-8");
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        }
+        response.setContentType("text/html;charset=utf-8");
+        String userId=request.getParameter("userId");
+        Map loadingMap=new HashMap();
+        try{
+        loadingMap=login.queryLoadingInfo(userId);
+        data.put("loadingMap",loadingMap);
+        data.put("code",1);
+        }catch (Exception e)
+        {
+            e.printStackTrace();
+            data.put("code",0);
+        }
+        ResponseJsonUtils.json(response, data);
+    }
 
 
 }

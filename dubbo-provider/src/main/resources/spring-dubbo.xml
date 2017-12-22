@@ -23,7 +23,7 @@
  
     <!-- 声明需要暴露的服务接口 -->
     <dubbo:service interface="com.pet.api.DemoService" ref="demoService" />
-    <dubbo:service interface="com.pet.api.LoginService" ref="login" />
+    <dubbo:service interface="com.pet.api.userLogin.LoginService" ref="login" />
 
 
 </beans>

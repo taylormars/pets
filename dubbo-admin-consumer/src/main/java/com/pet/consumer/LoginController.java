@@ -1,7 +1,7 @@
 package com.pet.consumer;
 
 import com.pet.api.DemoService;
-import com.pet.api.LoginService;
+import com.pet.api.userLogin.LoginService;
 import com.pet.api.model.User;
 import com.pet.api.model.UserAdmin;
 import com.pet.consumer.utils.GraphicUtils;
@@ -20,7 +20,6 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.util.Date;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 
