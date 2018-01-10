@@ -5,12 +5,14 @@
        xmlns:util="http://www.springframework.org/schema/util"
        xmlns:dubbo="http://code.alibabatech.com/schema/dubbo"
        xmlns:mvc="http://www.springframework.org/schema/mvc" xmlns:p="http://www.springframework.org/schema/p"
-
+       xmlns:task="http://www.springframework.org/schema/task"
        xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-4.3.xsd
         http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc.xsd
        	http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util-4.3.xsd
        	http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.3.xsd
-        http://code.alibabatech.com/schema/dubbo http://code.alibabatech.com/schema/dubbo/dubbo.xsd">
+        http://code.alibabatech.com/schema/dubbo http://code.alibabatech.com/schema/dubbo/dubbo.xsd
+        http://www.springframework.org/schema/task
+     http://www.springframework.org/schema/task/spring-task-3.0.xsd">
     <context:component-scan base-package="com.pet.consumer"/>
     <!-- 配置注解驱动 -->
     <mvc:annotation-driven/>
@@ -20,6 +22,17 @@
         <property name="prefix" value="/WEB-INF/view/"/>
         <property name="suffix" value=".jsp"/>
     </bean>
+    <task:annotation-driven/>
+
+
+    <bean id="PetInfoTask" class="com.pet.consumer.task.PetInfoTask"></bean>
+
+    <task:scheduled-tasks>
+        <!--
+这里表示的是从第五秒开始 ，每三秒执行一次 （而不是 三分之五 秒执行一次哦~~）
+-->
+        <task:scheduled ref="PetInfoTask" method="petInfoUpate" cron="0 0/1 * * * ?" />
+    </task:scheduled-tasks>
     <!-- 消费方应用名，用于计算依赖关系，不是匹配条件，不要与提供方一样 -->
     <dubbo:application name="#{dubbo['appname']}"  />
  

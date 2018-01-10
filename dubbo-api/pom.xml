@@ -8,9 +8,9 @@
         <version>1.0-SNAPSHOT</version>
     </parent>
 
-    <artifactId>demo-api</artifactId>
+    <artifactId>dubbo-api</artifactId>
 
-    <name>demo-api</name>
+    <name>dubbo-api</name>
     <url>http://maven.apache.org</url>
 
     <dependencies>
