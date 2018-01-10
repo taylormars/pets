@@ -1,6 +1,8 @@
 package com.pet.consumer;
 
 import com.pet.api.DemoService;
+import com.pet.api.model.AdoptInfo;
+import com.pet.api.model.EducationInfo;
 import com.pet.api.userLogin.LoginService;
 import com.pet.api.model.UserMain;
 import com.pet.consumer.utils.GraphicUtils;
@@ -227,6 +229,60 @@ public class LoginController {
             data.put("code",0);
         }
         ResponseJsonUtils.json(response, data);
+    }
+
+    @RequestMapping("adopt")
+    @ResponseBody
+    public void adopt(HttpServletRequest request,HttpServletResponse response){
+        logger.info("进入adopt方法》》》》》《《");
+        try {
+            request.setCharacterEncoding("utf-8");
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+        Map<String, Object> data = new HashMap<String, Object>();
+        response.setContentType("text/html;charset=utf-8");
+        String userId=request.getParameter("userId");
+        String petKindId=request.getParameter("petKindId");
+        String petNickName=request.getParameter("petNickName");
+        Map adoptMap=new HashMap();
+        Integer adoptId=0;
+        Integer educationId=0;
+
+        adoptMap=login.queryAdoptInfo(userId);
+        if(null==adoptMap){
+            logger.info("用户Id"+userId+"无领养记录");
+            AdoptInfo adoptInfo=new AdoptInfo();
+            adoptInfo.setUserId(Integer.valueOf(userId));
+            adoptInfo.setPetKindId(Integer.valueOf(petKindId));
+            adoptInfo.setPetNickName(petNickName);
+
+            adoptId=login.insertAdoptInfo(adoptInfo);
+            if(0!=adoptId){
+                logger.info("领养关系创建完成");
+                EducationInfo educationInfo=new EducationInfo();
+                educationInfo.setUserId(Integer.valueOf(userId));
+                educationInfo.setPetId(adoptId);
+                educationId=login.insertEducationInfo(educationInfo);
+                if (0!=educationId){
+                    logger.info("学历系统创建完成");
+                    data.put("petKindId",petKindId);
+                    data.put("petNickName",petNickName);
+                    data.put("code",1);
+                }else {
+                    logger.info("学历系统创建失败");
+                    data.put("code",0);
+                }
+            }else {
+                logger.info("领养关系创建失败");
+                data.put("code",0);
+            }
+        }else {
+            logger.info("已存在领养记录");
+            data.put("code",0);
+        }
+        ResponseJsonUtils.json(response,data);
+        //http://localhost:8010/adopt.do?userId=asdasd&petKindId=1&petNickName=khdk
     }
 
 

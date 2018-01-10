@@ -1,5 +1,7 @@
 package com.pet.api.userLogin;
 
+import com.pet.api.model.AdoptInfo;
+import com.pet.api.model.EducationInfo;
 import com.pet.api.model.UserAdmin;
 import com.pet.api.model.UserMain;
 
@@ -27,4 +29,10 @@ public interface LoginService {
     public String queryVerifyCode(String userVerifyCode);
 
     Map<String, Object> queryLoadingInfo(String userId);
+
+    Map<String,Object> queryAdoptInfo(String userId);
+
+    public Integer insertAdoptInfo(AdoptInfo adoptInfo);
+
+    public Integer insertEducationInfo(EducationInfo educationInfo);
 }

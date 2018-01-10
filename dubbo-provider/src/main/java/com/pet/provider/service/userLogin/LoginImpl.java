@@ -1,5 +1,7 @@
 package com.pet.provider.service.userLogin;
 
+import com.pet.api.model.AdoptInfo;
+import com.pet.api.model.EducationInfo;
 import com.pet.api.userLogin.LoginService;
 import com.pet.api.model.UserAdmin;
 import com.pet.api.model.UserMain;
@@ -84,7 +86,7 @@ public class LoginImpl implements LoginService {
 
     @Override
     public UserMain loginUserMain(String userName, String password) {
-        logger.info("进入loginAdmin方法》》》》》");
+        logger.info("进入loginUserMain方法》》》》》");
         String sql="SELECT * FROM user_main WHERE userName = ? AND `password` = ?";
         String passwordmd5=DigestUtils.md5Hex(password);
         try{
@@ -171,7 +173,7 @@ public class LoginImpl implements LoginService {
     @Override
     public Map<String, Object>queryLoadingInfo(String userId)
     {
-        String sql="SELECT IFNULL(ap.petkindid, 0) AS petkindid, um.userName, um.coin, um.diamond, um.userPicId, COUNT(ap.petid) AS isNew ,ap.petStatus ,ap.petnickname FROM adopt ap, user_main um WHERE ap.userId = um.userId AND um.userid = ?";
+        String sql="SELECT IFNULL(ap.petKindId, 0) AS petkindid, um.userName, um.coin, um.diamond, um.userPicId, COUNT(ap.petId) AS isNew ,ap.petStatus ,ap.petNickName FROM adopt ap, user_main um WHERE ap.userId = um.userId AND um.userId = ?";
         Map map=new HashMap();
         try {
             map = jdbcTemplate.queryForMap(sql, new Object[]{userId});
@@ -179,5 +181,46 @@ public class LoginImpl implements LoginService {
             e.printStackTrace();
         }
         return map;
+    }
+
+    @Override
+    public Map<String, Object> queryAdoptInfo(String userId) {
+        String sql="SELECT * FROM adopt WHERE userId =?";
+        Map map=new HashMap();
+        try {
+            map = jdbcTemplate.queryForMap(sql, new Object[]{userId});
+        }catch (Exception e){
+            e.printStackTrace();
+            return null;
+        }
+        return map;
+    }
+
+    @Override
+    public Integer insertAdoptInfo(AdoptInfo adoptInfo) {
+        String sql ="INSERT INTO adopt ( userId, petNickName, years, adoptTime, petKindId, petStatus ) VALUES (?,?,0, NOW() ,?,0)";
+        int adoptId=0;
+        try{
+            adoptId=sqlUtils.insertSqlAndReturnKeyId(sql,new Object[]{adoptInfo.getUserId(),adoptInfo.getPetNickName(),adoptInfo.getPetKindId()});
+            return adoptId;
+        }catch (Exception e)
+        {
+            logger.info("注册失败");
+            return adoptId;
+        }
+    }
+
+    @Override
+    public Integer insertEducationInfo(EducationInfo educationInfo) {
+        String sql ="INSERT INTO education_info(userId,petId) VALUES(?,?)";
+        int educationId=0;
+        try{
+            educationId=sqlUtils.insertSqlAndReturnKeyId(sql,new Object[]{educationInfo.getUserId(),educationInfo.getPetId()});
+            return educationId;
+        }catch (Exception e)
+        {
+            logger.info("注册失败");
+            return educationId;
+        }
     }
 }

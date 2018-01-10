@@ -32,6 +32,7 @@
     <!-- 生成远程服务代理，可以和本地bean一样使用demoService -->
     <dubbo:reference id="demoService" interface="com.pet.api.DemoService" />
     <dubbo:reference id="login" interface="com.pet.api.userLogin.LoginService" timeout="60000" />
+    <dubbo:reference id="educationInfo" interface="com.pet.api.petInfo.IPetInfo" timeout="60000" />
 
 
     <!-- redis工厂 -->
