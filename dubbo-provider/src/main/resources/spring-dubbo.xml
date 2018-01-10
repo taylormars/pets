@@ -25,6 +25,7 @@
     <dubbo:service interface="com.pet.api.DemoService" ref="demoService" />
     <dubbo:service interface="com.pet.api.userLogin.LoginService" ref="login" />
     <dubbo:service interface="com.pet.api.petInfo.IPetInfo" ref="petInfo" />
+    <dubbo:service interface="com.pet.api.petInfo.IToolInfo" ref="toolInfo" />
 
 
 </beans>

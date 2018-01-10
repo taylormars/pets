@@ -58,10 +58,10 @@ public class PetInfoController {
                 data.put("clean",adoptMap.get("clean"));
                 data.put("hunger",adoptMap.get("hunger"));
                 data.put("tired",adoptMap.get("tired"));
-                data.put("math",adoptMap.get("math"));
-                data.put("chinese",adoptMap.get("chinese"));
-                data.put("politics",adoptMap.get("politics"));
-                data.put("pe",adoptMap.get("pe"));
+                data.put("math",educationMap.get("math"));
+                data.put("chinese",educationMap.get("chinese"));
+                data.put("politics",educationMap.get("politics"));
+                data.put("pe",educationMap.get("pe"));
                 data.put("code",1);
             }else {
                 logger.info("获取宠物教育信息出错");

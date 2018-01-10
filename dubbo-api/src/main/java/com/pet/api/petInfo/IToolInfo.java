@@ -1,11 +1,11 @@
 package com.pet.api.petInfo;
 
+import java.util.List;
 import java.util.Map;
 
 public interface IToolInfo {
 
-    Map<String,Object> queryeducation(String petId);
+    List<Map<String,Object>> querytoolByuserId(String petId);
 
-    void updatePetInfo();
 
 }
