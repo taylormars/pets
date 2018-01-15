@@ -295,6 +295,22 @@ public class LoginController {
         //http://localhost:8010/adopt.do?userId=asdasd&petKindId=1&petNickName=khdk
     }
 
+    @RequestMapping("online")
+    void online(HttpServletRequest request){
+        try {
+            request.setCharacterEncoding("utf-8");
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+        String userId=request.getParameter("userId");
+
+        if(!getIpAddr(request).equals(redisUtils.get("Ip"+userId))){
+                Integer loginRecord=login.inserLoginRecord(userId,getIpAddr(request));
+            logger.info(loginRecord.toString());
+            }
+            redisUtils.set("Ip"+userId,getIpAddr(request),60*5);
+    }
+
 
     /**
      * 得到IP
