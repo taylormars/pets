@@ -117,7 +117,7 @@ function login() {
             }
             else if (data==1){
                 window.open("admin/index.html");
-
+                window.close();
             }
             }
         })

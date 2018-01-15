@@ -35,4 +35,6 @@ public interface LoginService {
     public Integer insertAdoptInfo(AdoptInfo adoptInfo);
 
     public Integer insertEducationInfo(EducationInfo educationInfo);
+
+    public Integer inserLoginRecord(String userId,String ip);
 }

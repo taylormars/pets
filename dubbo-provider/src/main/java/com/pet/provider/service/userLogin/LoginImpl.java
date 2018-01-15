@@ -223,4 +223,18 @@ public class LoginImpl implements LoginService {
             return educationId;
         }
     }
+
+    @Override
+    public Integer inserLoginRecord(String userId, String ip) {
+        String sql="INSERT INTO login_record (userId,ip,loginTime) VALUES(?,?,NOW())";
+        int loginRecord=0;
+        try{
+            loginRecord=sqlUtils.insertSqlAndReturnKeyId(sql,new Object[]{userId,ip});
+            return loginRecord;
+        }catch (Exception e)
+        {
+            logger.info("注册失败");
+            return loginRecord;
+        }
+    }
 }

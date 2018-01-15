@@ -109,7 +109,7 @@ public class LoginController {
     public void loginAdmin(HttpServletRequest request, HttpServletResponse response) {
         logger.info("进入loginUserMain方法》《《《");
         Map<String, Object> data = new HashMap<String, Object>();
-
+        Integer loginRecord=0;
         try {
             request.setCharacterEncoding("utf-8");
         } catch (UnsupportedEncodingException e) {
@@ -131,6 +131,15 @@ public class LoginController {
                 logger.info("登录用户名" + userName + "登陆成功");
                 data.put("code", "1");
                 data.put("userId",userMain.getUserId());
+                logger.info("开始写入登录记录userId"+userMain.getUserId()+"IP地址为"+getIpAddr(request));
+                loginRecord=login.inserLoginRecord(String.valueOf(userMain.getUserId()),getIpAddr(request));
+                if(loginRecord!=0){
+                    logger.info("开始写入登录记录userId"+userMain.getUserId()+"IP地址为"+getIpAddr(request)+"成功");
+                    redisUtils.set("Ip"+String.valueOf(userMain.getUserId()),getIpAddr(request),60*5);
+                    logger.info("将用户ip地址存入redis");
+                }else {
+                    logger.info("开始写入登录记录userId"+userMain.getUserId()+"IP地址为"+getIpAddr(request)+"失败");
+                }
             } else {
                 logger.info("登录用户名" + userName + "密码错误");
                 data.put("code", "2");
@@ -141,6 +150,7 @@ public class LoginController {
             data.put("code", "3");
         }
         }
+
         ResponseJsonUtils.json(response, data);
     }
 
@@ -283,6 +293,36 @@ public class LoginController {
         }
         ResponseJsonUtils.json(response,data);
         //http://localhost:8010/adopt.do?userId=asdasd&petKindId=1&petNickName=khdk
+    }
+
+
+    /**
+     * 得到IP
+     *
+     * @return
+     */
+    public static String getIpAddr(HttpServletRequest request) {
+        String ip = request.getHeader("x-forwarded-for");
+        if (ip == null || ip.length() == 0 || "unknown".equalsIgnoreCase(ip)) {
+            ip = request.getHeader("Proxy-Client-IP");
+        }
+        if (ip == null || ip.length() == 0 || "unknown".equalsIgnoreCase(ip)) {
+            ip = request.getHeader("WL-Proxy-Client-IP");
+        }
+        if (ip == null || ip.length() == 0 || "unknown".equalsIgnoreCase(ip)) {
+            ip = request.getRemoteAddr();
+        }
+        if (ip == null || ip.length() == 0 || "unknown".equalsIgnoreCase(ip)) {
+            ip = request.getHeader("http_client_ip");
+        }
+        if (ip == null || ip.length() == 0 || "unknown".equalsIgnoreCase(ip)) {
+            ip = request.getHeader("HTTP_X_FORWARDED_FOR");
+        }
+        // 如果是多级代理，那么取第一个ip为客户ip
+        if (ip != null && ip.indexOf(",") != -1) {
+            ip = ip.substring(ip.lastIndexOf(",") + 1, ip.length()).trim();
+        }
+        return ip;
     }
 
 
