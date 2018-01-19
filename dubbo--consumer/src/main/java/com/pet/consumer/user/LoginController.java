@@ -1,4 +1,4 @@
-package com.pet.consumer;
+package com.pet.consumer.user;
 
 import com.pet.api.DemoService;
 import com.pet.api.model.AdoptInfo;
@@ -42,7 +42,7 @@ public class LoginController {
     @RequestMapping("/test.do")
     @ResponseBody
     public String login(HttpServletRequest request, HttpServletResponse response) {
-       String test=request.getParameter("test");
+        String test = request.getParameter("test");
 
 //       logger.info(redissUtils.ping());
 //       redissUtils.set("test1","text");
@@ -94,8 +94,8 @@ public class LoginController {
             // 建立 uri 和 相应的 验证码 的关联 ( 存储到当前会话对象的属性中 )
 //            redissUtils.set(userVerifyCode,code,60*3);
 
-            redisUtils.set("verify"+userVerifyCode,code,60*3);
-            logger.info("生成redis缓存"+"verify"+userVerifyCode);
+            redisUtils.set("verify" + userVerifyCode, code, 60 * 3);
+            logger.info("生成redis缓存" + "verify" + userVerifyCode);
 //            login.insertVerifyCode(userVerifyCode,code);
 //            logger.info(String.valueOf(session.getAttribute(userVerifyCode)));
         } catch (IOException e) {
@@ -109,7 +109,7 @@ public class LoginController {
     public void loginAdmin(HttpServletRequest request, HttpServletResponse response) {
         logger.info("进入loginUserMain方法》《《《");
         Map<String, Object> data = new HashMap<String, Object>();
-        Integer loginRecord=0;
+        Integer loginRecord = 0;
         try {
             request.setCharacterEncoding("utf-8");
         } catch (UnsupportedEncodingException e) {
@@ -125,30 +125,30 @@ public class LoginController {
             logger.info("用户名不存在存在");
             data.put("code", "4");
         } else {
-        try {
-            UserMain userMain = login.loginUserMain(userName, password);
-            if (null != userMain) {
-                logger.info("登录用户名" + userName + "登陆成功");
-                data.put("code", "1");
-                data.put("userId",userMain.getUserId());
-                logger.info("开始写入登录记录userId"+userMain.getUserId()+"IP地址为"+getIpAddr(request));
-                loginRecord=login.inserLoginRecord(String.valueOf(userMain.getUserId()),getIpAddr(request));
-                if(loginRecord!=0){
-                    logger.info("开始写入登录记录userId"+userMain.getUserId()+"IP地址为"+getIpAddr(request)+"成功");
-                    redisUtils.set("Ip"+String.valueOf(userMain.getUserId()),getIpAddr(request),60*5);
-                    logger.info("将用户ip地址存入redis");
-                }else {
-                    logger.info("开始写入登录记录userId"+userMain.getUserId()+"IP地址为"+getIpAddr(request)+"失败");
+            try {
+                UserMain userMain = login.loginUserMain(userName, password);
+                if (null != userMain) {
+                    logger.info("登录用户名" + userName + "登陆成功");
+                    data.put("code", "1");
+                    data.put("userId", userMain.getUserId());
+                    logger.info("开始写入登录记录userId" + userMain.getUserId() + "IP地址为" + getIpAddr(request));
+                    loginRecord = login.inserLoginRecord(String.valueOf(userMain.getUserId()), getIpAddr(request));
+                    if (loginRecord != 0) {
+                        logger.info("开始写入登录记录userId" + userMain.getUserId() + "IP地址为" + getIpAddr(request) + "成功");
+                        redisUtils.set("Ip" + String.valueOf(userMain.getUserId()), getIpAddr(request), 60 * 5);
+                        logger.info("将用户ip地址存入redis");
+                    } else {
+                        logger.info("开始写入登录记录userId" + userMain.getUserId() + "IP地址为" + getIpAddr(request) + "失败");
+                    }
+                } else {
+                    logger.info("登录用户名" + userName + "密码错误");
+                    data.put("code", "2");
                 }
-            } else {
-                logger.info("登录用户名" + userName + "密码错误");
-                data.put("code", "2");
+            } catch (Exception e) {
+                e.printStackTrace();
+                logger.info("登录用户名" + userName + "系统异常");
+                data.put("code", "3");
             }
-        } catch (Exception e) {
-            e.printStackTrace();
-            logger.info("登录用户名" + userName + "系统异常");
-            data.put("code", "3");
-        }
         }
 
         ResponseJsonUtils.json(response, data);
@@ -157,7 +157,7 @@ public class LoginController {
 
     @RequestMapping("/register")
     @ResponseBody
-    public void register(HttpServletRequest request,HttpServletResponse response){
+    public void register(HttpServletRequest request, HttpServletResponse response) {
         logger.info("进入register方法》《《《");
         Map<String, Object> data = new HashMap<String, Object>();
 //        HttpSession session = request.getSession(true);
@@ -173,14 +173,14 @@ public class LoginController {
         String userVerifyCode = request.getParameter("userVerifyCode");
         logger.info(userVerifyCode);
 
-        String verfyCodeService =redisUtils.get("verify"+userVerifyCode);
-        if (verfyCodeService!=null) {
+        String verfyCodeService = redisUtils.get("verify" + userVerifyCode);
+        if (verfyCodeService != null) {
             UserMain userMainExsitName = login.exsitUserName(userName);
             if (null != userMainExsitName) {
                 logger.info("用户名存在");
                 data.put("code", "3");
             } else {
-                logger.info(userName+"用户名不存在");
+                logger.info(userName + "用户名不存在");
                 try {
                     if (verify.equals(verfyCodeService)) {
                         UserMain userMain = new UserMain();
@@ -209,7 +209,7 @@ public class LoginController {
                     data.put("code", 2);
                 }
             }
-        }else {
+        } else {
             logger.info("注册用户名" + userName + "注册失败.验证码过期");
             data.put("code", 5);
         }
@@ -218,7 +218,7 @@ public class LoginController {
 
     @RequestMapping("/loading")
     @ResponseBody
-    public void loading(HttpServletRequest request,HttpServletResponse response){
+    public void loading(HttpServletRequest request, HttpServletResponse response) {
         logger.info("进入loading方法》《《《");
         Map<String, Object> data = new HashMap<String, Object>();
         try {
@@ -227,88 +227,87 @@ public class LoginController {
             e.printStackTrace();
         }
         response.setContentType("text/html;charset=utf-8");
-        String userId=request.getParameter("userId");
-        Map loadingMap=new HashMap();
-        try{
-        loadingMap=login.queryLoadingInfo(userId);
-        data.put("loadingMap",loadingMap);
-        data.put("code",1);
-        }catch (Exception e)
-        {
+        String userId = request.getParameter("userId");
+        Map loadingMap = new HashMap();
+        try {
+            loadingMap = login.queryLoadingInfo(userId);
+            data.put("loadingMap", loadingMap);
+            data.put("code", 1);
+        } catch (Exception e) {
             e.printStackTrace();
-            data.put("code",0);
+            data.put("code", 0);
         }
         ResponseJsonUtils.json(response, data);
     }
 
     @RequestMapping("adopt")
     @ResponseBody
-    public void adopt(HttpServletRequest request,HttpServletResponse response){
+    public void adopt(HttpServletRequest request, HttpServletResponse response) {
         logger.info("进入adopt方法》》》》》《《");
         try {
             request.setCharacterEncoding("utf-8");
-        }catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         }
         Map<String, Object> data = new HashMap<String, Object>();
         response.setContentType("text/html;charset=utf-8");
-        String userId=request.getParameter("userId");
-        String petKindId=request.getParameter("petKindId");
-        String petNickName=request.getParameter("petNickName");
-        Map adoptMap=new HashMap();
-        Integer adoptId=0;
-        Integer educationId=0;
+        String userId = request.getParameter("userId");
+        String petKindId = request.getParameter("petKindId");
+        String petNickName = request.getParameter("petNickName");
+        Map adoptMap = new HashMap();
+        Integer adoptId = 0;
+        Integer educationId = 0;
 
-        adoptMap=login.queryAdoptInfo(userId);
-        if(null==adoptMap){
-            logger.info("用户Id"+userId+"无领养记录");
-            AdoptInfo adoptInfo=new AdoptInfo();
+        adoptMap = login.queryAdoptInfo(userId);
+        if (null == adoptMap) {
+            logger.info("用户Id" + userId + "无领养记录");
+            AdoptInfo adoptInfo = new AdoptInfo();
             adoptInfo.setUserId(Integer.valueOf(userId));
             adoptInfo.setPetKindId(Integer.valueOf(petKindId));
             adoptInfo.setPetNickName(petNickName);
 
-            adoptId=login.insertAdoptInfo(adoptInfo);
-            if(0!=adoptId){
+            adoptId = login.insertAdoptInfo(adoptInfo);
+            if (0 != adoptId) {
                 logger.info("领养关系创建完成");
-                EducationInfo educationInfo=new EducationInfo();
+                EducationInfo educationInfo = new EducationInfo();
                 educationInfo.setUserId(Integer.valueOf(userId));
                 educationInfo.setPetId(adoptId);
-                educationId=login.insertEducationInfo(educationInfo);
-                if (0!=educationId){
+                educationId = login.insertEducationInfo(educationInfo);
+                if (0 != educationId) {
                     logger.info("学历系统创建完成");
-                    data.put("petKindId",petKindId);
-                    data.put("petNickName",petNickName);
-                    data.put("code",1);
-                }else {
+                    data.put("petKindId", petKindId);
+                    data.put("petNickName", petNickName);
+                    data.put("code", 1);
+                } else {
                     logger.info("学历系统创建失败");
-                    data.put("code",0);
+                    data.put("code", 0);
                 }
-            }else {
+            } else {
                 logger.info("领养关系创建失败");
-                data.put("code",0);
+                data.put("code", 0);
             }
-        }else {
+        } else {
             logger.info("已存在领养记录");
-            data.put("code",0);
+            data.put("code", 0);
         }
-        ResponseJsonUtils.json(response,data);
+        ResponseJsonUtils.json(response, data);
         //http://localhost:8010/adopt.do?userId=asdasd&petKindId=1&petNickName=khdk
     }
 
     @RequestMapping("online")
-    void online(HttpServletRequest request){
+    void online(HttpServletRequest request) {
         try {
             request.setCharacterEncoding("utf-8");
-        }catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         }
-        String userId=request.getParameter("userId");
+        String userId = request.getParameter("userId");
 
-        if(!getIpAddr(request).equals(redisUtils.get("Ip"+userId))){
-                Integer loginRecord=login.inserLoginRecord(userId,getIpAddr(request));
+        if (!getIpAddr(request).equals(redisUtils.get("Ip" + userId))) {
+            Integer loginRecord = login.inserLoginRecord(userId, getIpAddr(request));
             logger.info(loginRecord.toString());
-            }
-            redisUtils.set("Ip"+userId,getIpAddr(request),60*5);
+        }
+        redisUtils.set("Ip" + userId, getIpAddr(request), 60 * 5);
     }
 
 

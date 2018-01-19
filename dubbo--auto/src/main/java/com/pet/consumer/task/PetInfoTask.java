@@ -1,6 +1,7 @@
 package com.pet.consumer.task;
 
 //import com.pet.api.petInfo.IPetInfo;
+
 import com.pet.api.petInfo.IPetInfo;
 import com.pet.api.userLogin.LoginService;
 import com.pet.consumer.utils.ResponseJsonUtils;
@@ -27,18 +28,18 @@ public class PetInfoTask {
     @Resource
     IPetInfo petInfo;
 
-//    @Scheduled(cron = "0 0/1 * * * ?")
-    public  void petInfoUpate(){
+    //    @Scheduled(cron = "0 0/1 * * * ?")
+    public void petInfoUpate() {
         logger.info("-----宠物状态自动削减定时器开始-----");
 
         try {
             petInfo.updatePetInfo();
             logger.info("-----宠物状态自动削减定时器结束-----");
 
-        }catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
             logger.info("-----宠物状态自动削减定时器异常-----");
         }
     }
 
-  }
+}

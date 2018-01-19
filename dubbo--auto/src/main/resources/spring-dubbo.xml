@@ -28,9 +28,6 @@
     <bean id="PetInfoTask" class="com.pet.consumer.task.PetInfoTask"></bean>
 
     <task:scheduled-tasks>
-        <!--
-这里表示的是从第五秒开始 ，每三秒执行一次 （而不是 三分之五 秒执行一次哦~~）
--->
         <task:scheduled ref="PetInfoTask" method="petInfoUpate" cron="0 0/1 * * * ?" />
     </task:scheduled-tasks>
     <!-- 消费方应用名，用于计算依赖关系，不是匹配条件，不要与提供方一样 -->
