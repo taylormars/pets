@@ -7,8 +7,36 @@
 --%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
+<script language="JavaScript" defer="defer" src="js/jquery-easyui-1.5.4/jquery-1.8.0.min.js" type="text/javascript"></script>
+
+<style>
+    header {
+        color:black;
+        text-align:center;
+        padding:5px;
+    }
+    nav {
+        line-height:30px;
+        background-color:#eeeeee;
+        height:300px;
+        width:100px;
+        float:left;
+        padding:5px;
+    }
+    section {
+        width:400px;
+        padding:10px;
+    }
+    footer {
+        background-color:black;
+        color:white;
+        clear:both;
+        text-align:center;
+        padding:5px;
+    }
+</style>
 <head>
-    <title>NeverGoPet 后台管理</title>
+    <title>ForeverGoPet 后台管理</title>
 </head>
 <body>
 <script type="text/javascript">
@@ -36,14 +64,73 @@
         }
 
     }
+
+    function login() {
+        var userName=document.getElementById('userName').value;
+        var password=document.getElementById('password').value;
+        var verify=document.getElementById('verifyInput').value;
+
+        if (null==userName||userName=="")
+        {
+            alert("用户名为空")
+        }else if (null==password||password=="")
+        {
+            alert("密码为空")
+        }else if (null==verify||verify==""){
+            alert("验证码为空")
+        }
+        else {
+            alert(userName +"ad"+password)
+            $.ajax({
+                type: "POST",
+                url: "/login.do",
+                dataType : 'json',
+                async : false,
+                data : {
+                    "userName" : userName,
+                    "password":password,
+                    "verify": verify,
+                },
+                success : function(data) {
+                    alert(data)
+
+                    if(data==2){
+                        alert("用户名密码错误")
+                    }
+                    else if(data==3){
+                        alert("系统错误")
+                    }
+                    else if (data==1){
+                        location.href = "index.jsp";
+//                        window.open("admin/index.html");
+//                        window.close();
+                    }
+                }
+            })
+        }
+
+    }
 </script>
 
-<div>
-    <input type="text" name="userName" id="userName">
-    <input type="text" name="password" id="password">
-    <input type="text" name="verfyCode" id="verfyCode">
-    <img src="/verify.do" onclick="myRefersh(this)">
+<div><header>
+    <h1>ForeverGoPet 后台管理</h1>
+</header>
 </div>
-
+    <CENTER>
+        <section>
+<form >
+<div>
+    用户名：
+    <input type="text" name="userName" id="userName"></div>
+   <div>密码：
+       <input type="text" name="password" id="password"></div>
+    <div>验证码：
+    <input type="text" name="verfyCode" id="verifyInput">
+    <img src="/verify.do" onclick="myRefersh(this)">
+    </div>
+    <input type="button" value="登录" onclick="login()" >
+</form>
+        </section>
+    </CENTER>
 </body>
 </html>

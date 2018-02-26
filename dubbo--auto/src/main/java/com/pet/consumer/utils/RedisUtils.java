@@ -27,6 +27,10 @@ public class RedisUtils {
         this.getJedis().del(key);
     }
 
+    public Long ttl(String key){
+        Long value = this.getJedis().ttl(key);
+        return value;
+    }
     /**
      * 添加key value 并且设置存活时间(byte)
      * @param key

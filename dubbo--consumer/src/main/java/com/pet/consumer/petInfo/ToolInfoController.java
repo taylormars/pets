@@ -76,7 +76,7 @@ public class ToolInfoController {
             if (status > 0) {
                 status = toolInfo.updateToolUse(userId, toolId, sums);
                 if (status == 1) {
-                    logger.info("Step1--用户" + userId + "使用道具成功" + toolId + "次数" + sums);
+                    logger.info("Step1--用户" + userId + "使用道具-1" + toolId + "次数" + sums);
                     Map<String, Object> toolInfo2 = toolInfo.queryToolInfoByToolId(toolId);
                     if (null != toolInfo2) {
                         status = toolInfo.updatePetInfoByUseTool(userId, toolInfo2.get("hunger").toString(), toolInfo2.get("clean").toString(), toolInfo2.get("mood").toString(), toolInfo2.get("tired").toString());

@@ -39,7 +39,7 @@ public class PetInfoController {
         response.setContentType("text/html;charset=utf-8");
         String userId = request.getParameter("userId");
         Map adoptMap = new HashMap();
-        Map educationMap = new HashMap();
+//        Map educationMap = new HashMap();
         Map<String, Object> data = new HashMap<String, Object>();
 
         adoptMap = login.queryAdoptInfo(userId);
@@ -47,9 +47,9 @@ public class PetInfoController {
             logger.info("用户Id" + userId + "无领养记录");
             data.put("code", 0);
         } else {
-            logger.info("开始获取宠物教育信息");
-            educationMap = petInfo.queryeducation(adoptMap.get("petId").toString());
-            if (null != educationMap) {
+//            logger.info("开始获取宠物教育信息");
+//            educationMap = petInfo.queryeducation(adoptMap.get("petId").toString());
+//            if (null != educationMap) {
                 logger.info("开始返回宠物信息");
                 data.put("petNickName", adoptMap.get("petNickName"));
                 data.put("adoptTime", adoptMap.get("adoptTime"));
@@ -58,15 +58,15 @@ public class PetInfoController {
                 data.put("clean", adoptMap.get("clean"));
                 data.put("hunger", adoptMap.get("hunger"));
                 data.put("tired", adoptMap.get("tired"));
-                data.put("math", educationMap.get("math"));
-                data.put("chinese", educationMap.get("chinese"));
-                data.put("politics", educationMap.get("politics"));
-                data.put("pe", educationMap.get("pe"));
+                data.put("math", adoptMap.get("math"));
+                data.put("chinese", adoptMap.get("chinese"));
+                data.put("politics", adoptMap.get("politics"));
+                data.put("pe", adoptMap.get("pe"));
                 data.put("code", 1);
-            } else {
-                logger.info("获取宠物教育信息出错");
-                data.put("code", 0);
-            }
+//            } else {
+//                logger.info("获取宠物教育信息出错");
+//                data.put("code", 0);
+//            }
         }
         ResponseJsonUtils.json(response, data);
     }

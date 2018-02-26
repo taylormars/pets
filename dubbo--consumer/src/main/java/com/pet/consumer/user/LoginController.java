@@ -96,6 +96,8 @@ public class LoginController {
 
             redisUtils.set("verify" + userVerifyCode, code, 60 * 3);
             logger.info("生成redis缓存" + "verify" + userVerifyCode);
+            logger.info("生成redis缓存" + "verify" +redisUtils.ttl("verify" + userVerifyCode));
+
 //            login.insertVerifyCode(userVerifyCode,code);
 //            logger.info(String.valueOf(session.getAttribute(userVerifyCode)));
         } catch (IOException e) {
@@ -269,19 +271,19 @@ public class LoginController {
             adoptId = login.insertAdoptInfo(adoptInfo);
             if (0 != adoptId) {
                 logger.info("领养关系创建完成");
-                EducationInfo educationInfo = new EducationInfo();
-                educationInfo.setUserId(Integer.valueOf(userId));
-                educationInfo.setPetId(adoptId);
-                educationId = login.insertEducationInfo(educationInfo);
-                if (0 != educationId) {
-                    logger.info("学历系统创建完成");
+//                EducationInfo educationInfo = new EducationInfo();
+//                educationInfo.setUserId(Integer.valueOf(userId));
+//                educationInfo.setPetId(adoptId);
+//                educationId = login.insertEducationInfo(educationInfo);
+//                if (0 != educationId) {
+//                    logger.info("学历系统创建完成");
                     data.put("petKindId", petKindId);
                     data.put("petNickName", petNickName);
                     data.put("code", 1);
-                } else {
-                    logger.info("学历系统创建失败");
-                    data.put("code", 0);
-                }
+//                } else {
+//                    logger.info("学历系统创建失败");
+//                    data.put("code", 0);
+//                }
             } else {
                 logger.info("领养关系创建失败");
                 data.put("code", 0);
@@ -335,10 +337,20 @@ public class LoginController {
         }
         // 如果是多级代理，那么取第一个ip为客户ip
         if (ip != null && ip.indexOf(",") != -1) {
-            ip = ip.substring(ip.lastIndexOf(",") + 1, ip.length()).trim();
+            ip = ip.substring( 0,(ip.lastIndexOf(","))).trim();
         }
         return ip;
     }
 
+    @RequestMapping("/t")
+    @ResponseBody
+    public void t(HttpServletRequest request, HttpServletResponse response) {
+        logger.info("进入loading方法》《《《");
+        logger.info(redisUtils.ttl("verify1").toString());
+
+        System.out.println(redisUtils.keys("verify*"));
+
+//        logger.info(redisUtils.keys("verify*").toString());
+    }
 
 }

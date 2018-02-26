@@ -34,6 +34,8 @@
     <dubbo:reference id="login" interface="com.pet.api.userLogin.LoginService" timeout="60000" />
     <dubbo:reference id="petInfo" interface="com.pet.api.petInfo.IPetInfo" timeout="60000" />
     <dubbo:reference id="toolInfo" interface="com.pet.api.petInfo.IToolInfo" timeout="60000" />
+    <dubbo:reference id="other" interface="com.pet.api.other.IOther" timeout="60000" />
+    <dubbo:reference id="study" interface="com.pet.api.study.IStudy" timeout="60000" />
 
 
     <!-- redis工厂 -->
