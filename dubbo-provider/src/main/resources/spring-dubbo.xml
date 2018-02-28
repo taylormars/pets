@@ -28,6 +28,7 @@
     <dubbo:service interface="com.pet.api.petInfo.IToolInfo" ref="toolInfo" />
     <dubbo:service interface="com.pet.api.other.IOther" ref="other" />
     <dubbo:service interface="com.pet.api.study.IStudy" ref="study" />
+    <dubbo:service interface="com.pet.api.shop.IShop" ref="shop" />
 
 
 </beans>
