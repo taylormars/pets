@@ -28,7 +28,7 @@ public class PetInfoTask {
     @Resource
     IPetInfo petInfo;
 
-    //    @Scheduled(cron = "0 0/1 * * * ?")
+    //    @Scheduled(cron = "0 0/30 * * * ?")
     public void petInfoUpate() {
         logger.info("-----宠物状态自动削减定时器开始-----");
 

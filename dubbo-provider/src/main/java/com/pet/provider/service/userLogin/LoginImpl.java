@@ -187,7 +187,7 @@ public class LoginImpl implements LoginService {
         try {
             map = jdbcTemplate.queryForMap(sql, new Object[]{userId});
         } catch (Exception e) {
-            e.printStackTrace();
+//            e.printStackTrace();
             return null;
         }
         return map;

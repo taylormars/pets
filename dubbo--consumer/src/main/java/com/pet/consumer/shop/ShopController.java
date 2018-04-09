@@ -74,7 +74,6 @@ public class ShopController {
            if (userCoin<toolCoin*Integer.parseInt(sums)){
                data.put("code",2);
            }else if ("e".equals(toolInfoMap.get("sums"))){
-            //todo 减少用户金币并且在道具记录中添加记录
                 int status = shop.updateUserCoin(userId,toolCoin*Integer.parseInt(sums));
                 if (status==1){
                     status = shop.insertToolRecord(userId,toolId,sums);
@@ -111,6 +110,31 @@ public class ShopController {
             data.put("code",0);
         }
         ResponseJsonUtils.json(response, data);
+    }
+
+
+    @RequestMapping("coin")
+    @ResponseBody
+    public void coin(HttpServletRequest request,HttpServletResponse response){
+        logger.info(">>>>>>>>>进入coin方法》》》》》》》》");
+        try {
+            request.setCharacterEncoding("utf-8");
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        }
+        response.setContentType("text/html;charset=utf-8");
+        String userId = request.getParameter("userId");
+        Map<String, Object> data = new HashMap<String, Object>();
+        try{
+            Map<String,Object>coinMap = shop.queryCoinByUserId(userId);
+            data.put("coin",coinMap.get("coin"));
+            data.put("code",1);
+        }catch(Exception e){
+            e.printStackTrace();
+            data.put("code",0);
+        }
+        ResponseJsonUtils.json(response, data);
+
     }
 
 

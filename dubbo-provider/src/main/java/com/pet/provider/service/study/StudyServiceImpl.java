@@ -13,9 +13,14 @@ public class StudyServiceImpl implements IStudy {
     @Resource
     private SqlUtils sqlUtils;
     @Override
-    public int updateStudyInfo(String userId, String lesson, Integer status) {
+    public int updateStudyInfo(String userId, String lesson, Integer status,String benefit,Integer reward) {
 //todo 增加属性
-        String sql = "UPDATE adopt SET "+lesson+" = "+lesson+" +"+status+" WHERE userId = "+userId;
+        String sql ;
+        if(benefit.equals("all")){
+            sql = "UPDATE adopt SET "+lesson+" = "+lesson+" +"+status+" , intelligence = intelligence +"+reward+" , swift = swift +"+reward+" , strength = strength +"+reward+ " WHERE userId = "+userId;
+        }else {
+       sql = "UPDATE adopt SET "+lesson+" = "+lesson+" +"+status+" , "+benefit +"="+ benefit +"+"+reward+" WHERE userId = "+userId;
+        }
         try {
             jdbcTemplate.update(sql);
         }catch (Exception e){
@@ -36,14 +41,32 @@ public class StudyServiceImpl implements IStudy {
     }
 
     @Override
-    public int updateStudyStatus(String userId, Integer status) {
-        String sql = "UPDATE adopt SET tired= tired -"+status+" , hunger= hunger- "+status+" WHERE userId = "+userId;
+    public int updateStudyStatus(String userId, Integer status,Integer cost) {
+        String sql1 = "UPDATE adopt SET tired= tired -"+status+" , hunger= hunger- "+status+" , clean = clean- "+status+" , health = health- "+status+" WHERE userId = "+userId;
+        String sql2 = "UPDATE user_main SET coin = coin - "+cost +" WHERE userId = "+userId;
         try {
-            jdbcTemplate.update(sql);
+            jdbcTemplate.update(sql1);
+            jdbcTemplate.update(sql2);
         }catch (Exception e){
             e.printStackTrace();
             return 0;
         }
         return 1;
     }
+
+
+
+    @Override
+    public  int updateWorkInfo(String userId,Integer reword){
+        String sql = "UPDATE user_main SET coin = coin + "+reword +" WHERE userId = "+userId;
+        try {
+            jdbcTemplate.update(sql);
+            return 1;
+            }catch(Exception e){
+                e.printStackTrace();
+                return  0 ;
+        }
+        }
+
 }
+

@@ -72,4 +72,16 @@ public class ShopImpl implements IShop {
             return  0;
         }
     }
+
+    @Override
+    public Map<String, Object> queryCoinByUserId(String userId) {
+        String sql ="SELECT coin FROM user_main WHERE userId="+userId;
+        try {
+            Map<String, Object> map = jdbcTemplate.queryForMap(sql);
+            return map;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
 }

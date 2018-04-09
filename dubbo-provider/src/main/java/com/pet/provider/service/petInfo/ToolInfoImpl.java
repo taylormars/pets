@@ -55,9 +55,9 @@ public class ToolInfoImpl implements IToolInfo {
 
     @Override
     public Integer updatePetInfoByUseTool(String userId, String hunger, String clean, String mood, String tired) {
-        String sql = "UPDATE adopt SET  hunger = CASE WHEN hunger + ? > 0 THEN hunger + ? WHEN hunger + ? <= 0 THEN 0 END, clean = CASE WHEN clean + ? > 0 THEN clean + ? WHEN clean + ? <= 0 THEN 0 END,  mood = CASE WHEN mood + ? > 0 THEN mood + ? WHEN mood + ? <= 0 THEN 0 END, tired = CASE WHEN tired + ? > 0 THEN tired + ? WHEN tired + ? <= 0 THEN 0 END WHERE userId=?";
+        String sql = "UPDATE adopt SET  hunger = CASE WHEN hunger + ? > 0 AND hunger + ? <= 100 THEN hunger + ? WHEN hunger + ? <= 0 THEN 0 WHEN hunger + ? > 100 THEN 100 END, clean = CASE WHEN clean + ? > 0 AND clean + ? <= 100 THEN clean + ? WHEN clean + ? <= 0 THEN 0 WHEN clean + ? > 100 THEN 100 END,  mood = CASE WHEN mood + ? > 0 AND mood + ? <=100 THEN mood + ? WHEN mood + ? <= 0 THEN 0 WHEN mood + ? > 100 THEN 100  END, tired = CASE WHEN tired + ? > 0 AND tired + ? <=100 THEN tired + ? WHEN tired + ? <= 0 THEN 0 WHEN tired + ? > 100 THEN 100 END WHERE userId=?";
         try {
-            jdbcTemplate.update(sql, new Object[]{Integer.valueOf(hunger), Integer.valueOf(hunger), Integer.valueOf(hunger), Integer.valueOf(clean), Integer.valueOf(clean), Integer.valueOf(clean), Integer.valueOf(mood), Integer.valueOf(mood), Integer.valueOf(mood), Integer.valueOf(tired), Integer.valueOf(tired), Integer.valueOf(tired), Integer.valueOf(userId)});
+            jdbcTemplate.update(sql, new Object[]{Integer.valueOf(hunger), Integer.valueOf(hunger),Integer.valueOf(hunger), Integer.valueOf(hunger), Integer.valueOf(hunger), Integer.valueOf(clean), Integer.valueOf(clean), Integer.valueOf(clean), Integer.valueOf(clean), Integer.valueOf(clean), Integer.valueOf(mood),Integer.valueOf(mood),Integer.valueOf(mood), Integer.valueOf(mood), Integer.valueOf(mood), Integer.valueOf(tired),  Integer.valueOf(tired),Integer.valueOf(tired),Integer.valueOf(tired), Integer.valueOf(tired), Integer.valueOf(userId)});
             return 1;
         } catch (Exception e) {
             e.printStackTrace();
