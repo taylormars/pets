@@ -37,6 +37,7 @@
     <dubbo:reference id="other" interface="com.pet.api.other.IOther" timeout="60000" />
     <dubbo:reference id="study" interface="com.pet.api.study.IStudy" timeout="60000" />
     <dubbo:reference id="shop" interface="com.pet.api.shop.IShop" timeout="60000" />
+    <dubbo:reference id="friends" interface="com.pet.api.friends.IFriends" timeout="60000" />
 
 
     <!-- redis工厂 -->

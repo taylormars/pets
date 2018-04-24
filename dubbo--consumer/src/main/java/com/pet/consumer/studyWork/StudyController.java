@@ -143,4 +143,30 @@ public class StudyController {
         ResponseJsonUtils.json(response, data);
     }
 
+    @RequestMapping("workOrStudy")
+    @ResponseBody
+    public void workOrStudy(HttpServletRequest request,HttpServletResponse response){
+        logger.info("--===--进入workOrStudy方法---===");
+        try {
+            request.setCharacterEncoding("utf-8");
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        }
+        response.setContentType("text/html;charset=utf-8");
+        String userId = request.getParameter("userId");
+        Map<String, Object> data = new HashMap<String, Object>();
+        if (redis.exists("studyWork" + userId)) {
+            logger.info("宠物正在学习工作中");
+            String lAS[]=redis.get("studyWork"+userId).split(",");
+            String lessonW = lAS[0];
+            Long studyWTime =redis.ttl("studyWork"+userId);
+            data.put("code", "1");
+            data.put("lessonW",lessonW);
+            data.put("studyWTime",studyWTime);
+        }else {
+            data.put("code",0);
+        }
+        ResponseJsonUtils.json(response,data);
+    }
+
 }

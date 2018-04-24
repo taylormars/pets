@@ -29,6 +29,7 @@
     <dubbo:service interface="com.pet.api.other.IOther" ref="other" />
     <dubbo:service interface="com.pet.api.study.IStudy" ref="study" />
     <dubbo:service interface="com.pet.api.shop.IShop" ref="shop" />
+    <dubbo:service interface="com.pet.api.friends.IFriends" ref="friends" />
 
 
 </beans>

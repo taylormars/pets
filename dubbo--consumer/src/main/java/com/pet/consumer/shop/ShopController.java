@@ -127,7 +127,7 @@ public class ShopController {
         Map<String, Object> data = new HashMap<String, Object>();
         try{
             Map<String,Object>coinMap = shop.queryCoinByUserId(userId);
-            data.put("coin",coinMap.get("coin"));
+            data.put("coin",Integer.parseInt(String.valueOf(coinMap.get("coin"))));
             data.put("code",1);
         }catch(Exception e){
             e.printStackTrace();
