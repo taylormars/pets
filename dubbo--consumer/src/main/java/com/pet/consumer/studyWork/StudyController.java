@@ -122,7 +122,7 @@ public class StudyController {
                     } else if (tired < tiredStatus * Integer.valueOf(studyTime) / 30) {
                         data.put("code", 3);
                     } else {
-                        int status=study.updateStudyStatus(userId, hungerStatus * Integer.valueOf(studyTime) / 30,cost * Integer.valueOf(studyTime) / 30);
+                        int status=study.updateStudyStatus(userId, hungerStatus * Integer.valueOf(studyTime) / 30,cost * Integer.valueOf(studyTime) / 30,wC.toString());
                         if (status==1){
                         redis.set("studyWork" + userId, lesson + "," +  Integer.valueOf(studyTime) / 30 + "," + benefit + "," +reward , 60 * Integer.valueOf(studyTime));
                         study.insertStudyRecord(userId, lesson, studyTime);

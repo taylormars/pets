@@ -41,12 +41,14 @@ public class StudyServiceImpl implements IStudy {
     }
 
     @Override
-    public int updateStudyStatus(String userId, Integer status,Integer cost) {
+    public int updateStudyStatus(String userId, Integer status,Integer cost,String wC) {
         String sql1 = "UPDATE adopt SET tired= tired -"+status+" , hunger= hunger- "+status+" , clean = clean- "+status+" , health = health- "+status+" WHERE userId = "+userId;
         String sql2 = "UPDATE user_main SET coin = coin - "+cost +" WHERE userId = "+userId;
         try {
             jdbcTemplate.update(sql1);
-            jdbcTemplate.update(sql2);
+            if (wC.equals("1")){
+                jdbcTemplate.update(sql2);
+            }
         }catch (Exception e){
             e.printStackTrace();
             return 0;

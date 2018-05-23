@@ -15,6 +15,6 @@ public interface IShop {
 
     Integer insertToolRecord(String userId,String toolId,String sums);
 
-    Map<String,Object> queryCoinByUserId(String userId);
+   Integer queryCoinByUserId(String userId);
 
 }

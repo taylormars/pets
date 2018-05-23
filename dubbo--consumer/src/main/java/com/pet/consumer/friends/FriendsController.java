@@ -2,9 +2,7 @@ package com.pet.consumer.friends;
 
 
 import com.pet.api.friends.IFriends;
-import com.pet.consumer.petInfo.PetInfoController;
 import com.pet.consumer.utils.ResponseJsonUtils;
-import org.omg.PortableInterceptor.INACTIVE;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
@@ -15,9 +13,7 @@ import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.UnsupportedEncodingException;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @Controller
 public class FriendsController {
@@ -111,7 +107,5 @@ public class FriendsController {
             }
         ResponseJsonUtils.json(response, data);
     }
-
-
 
 }

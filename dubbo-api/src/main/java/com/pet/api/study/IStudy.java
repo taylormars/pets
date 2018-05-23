@@ -6,7 +6,7 @@ public interface IStudy {
 
     public void insertStudyRecord(String userId,String lesson,String studyTime);
 
-    public  int updateStudyStatus(String userId,Integer statusNum ,Integer cost);
+    public  int updateStudyStatus(String userId,Integer statusNum ,Integer cost,String wC);
 
     public int updateWorkInfo(String userId, Integer reword);
 

@@ -44,6 +44,7 @@ public class FriendsServiceImpl implements IFriends{
         String sql = "INSERT INTO friend_relationship (userId,friendUserId) VALUES(?,?)";
         try {
             jdbcTemplate.update(sql, new Object[]{userId, friendsId});
+            jdbcTemplate.update(sql, new Object[]{friendsId, userId});
             return 1;
         } catch (Exception e) {
             e.printStackTrace();

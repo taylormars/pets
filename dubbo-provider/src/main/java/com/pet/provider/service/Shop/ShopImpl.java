@@ -1,7 +1,6 @@
 package com.pet.provider.service.Shop;
 
 import com.pet.api.shop.IShop;
-import org.omg.PortableInterceptor.INACTIVE;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Service;
 
@@ -74,14 +73,13 @@ public class ShopImpl implements IShop {
     }
 
     @Override
-    public Map<String, Object> queryCoinByUserId(String userId) {
+    public Integer queryCoinByUserId(String userId) {
         String sql ="SELECT coin FROM user_main WHERE userId="+userId;
         try {
             Map<String, Object> map = jdbcTemplate.queryForMap(sql);
-            return map;
+            return Integer.valueOf(map.get("coin").toString());
         } catch (Exception e) {
-            e.printStackTrace();
-            return null;
+            return 0;
         }
     }
 }
